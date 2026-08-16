@@ -28,6 +28,7 @@ Com tudo no ar (passos abaixo), os links ficam disponíveis em:
 | Feature server (HTTP) | http://localhost:6566 |
 | Feast UI | http://localhost:8888 |
 | RedisInsight | http://localhost:5540 |
+| Feast Docs | https://feast.dev/ |
 
 ## Quickstart
 
