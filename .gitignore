@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Feast registry e dados gerados localmente (reproduzíveis via notebooks)
+data/registry.db
+data/offline_store/**
+
+# manter a estrutura de pastas versionada
+!data/offline_store/.gitkeep
+
+.env

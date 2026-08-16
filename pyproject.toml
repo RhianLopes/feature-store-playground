@@ -1,0 +1,23 @@
+[project]
+name = "feature-store-playground"
+version = "0.1.0"
+description = "Playground local ponta a ponta de feature store: Feast + Delta Lake (offline) + Redis (online)"
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "deltalake>=0.18,<1.0.0",
+    "feast[duckdb,grpcio,redis]==0.65.0",
+    "numpy>=2.0,<3.0",
+    "pandas>=2.0,<3.0",
+    "requests>=2.31",
+]
+
+[tool.uv]
+package = false
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.3.0",
+    "jupyterlab>=4.6.3",
+    "jupytext>=1.19.5",
+]

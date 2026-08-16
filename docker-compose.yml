@@ -1,0 +1,56 @@
+services:
+  redis:
+    image: redis:7.2-alpine
+    container_name: feast-playground-redis
+    ports:
+      - "6379:6379"
+      # feature-server e feast-ui rodam com network_mode "service:redis"
+      # (compartilham o network namespace deste container), por isso o
+      # feature_store.yaml continua apontando para "localhost:6379" tanto
+      # localmente quanto dentro dos containers. As portas expostas por eles
+      # precisam ser publicadas aqui, que é quem detém o namespace de rede.
+      - "6566:6566" # feature-server (feast serve)
+      - "8888:8888" # feast-ui (feast ui)
+    command: ["redis-server", "--save", "60", "1", "--loglevel", "warning"]
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: feast-playground-redisinsight
+    ports:
+      - "5540:5540"
+    volumes:
+      - redisinsight_data:/data
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  feature-server:
+    build: .
+    container_name: feast-playground-feature-server
+    network_mode: "service:redis"
+    command: ["feast", "serve", "--host", "0.0.0.0"]
+    volumes:
+      - ./feature_repo:/app/feature_repo
+      - ./data:/app/data
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  feast-ui:
+    build: .
+    container_name: feast-playground-ui
+    network_mode: "service:redis"
+    command: ["feast", "ui", "--host", "0.0.0.0"]
+    volumes:
+      - ./feature_repo:/app/feature_repo
+      - ./data:/app/data
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+volumes:
+  redis_data:
+  redisinsight_data:
